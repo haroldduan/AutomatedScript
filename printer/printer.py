@@ -65,7 +65,9 @@ class Printer(object):
             if self.__config:
                 cur_path = self.__config["dir_path"] if self.__config["dir_path"] else \
                     os.path.abspath(os.path.dirname(__file__))
-                print cur_path
+                if not os.path.exists(cur_path):
+                    raise IOError, 'Can not find the dir path:[%s]!' % cur_path
+                # print cur_path
                 all_files = os.listdir(cur_path)
                 exts = self.__config["file_exts_in"]
                 names = self.__config["file_name_in"]
@@ -101,7 +103,7 @@ class Printer(object):
             self.__print()
             pass
         except Exception as e:
-            raise e
+            self.__logger.exception(e.message)
         pass
 
 # class Filer(object):
@@ -110,5 +112,3 @@ class Printer(object):
 #     def __init__(self):
 
 #         pass
-
-
