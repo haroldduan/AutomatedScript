@@ -6,11 +6,9 @@ import inspect
 import sys
 import logging
 import json
-import win32api
-import win32ui
-import win32con
-import win32print
 import tempfile
+import platform
+
 
 class Printer(object):
     ''' Windows print service class '''
@@ -85,16 +83,47 @@ class Printer(object):
 
     def __print(self):
         try:
+            sys_platform = platform.system()
+            if sys_platform == "Windows":
+                self.__print_in_windows()
+                pass
+            elif sys_platform == "Linux" or sys_platform == "Darwin":
+                self.__print_in_unix()
+                pass
+            else:
+                pass
+        except Exception as e:
+            raise e
+        pass
+
+    def __print_in_windows(self):
+        try:
+            import win32api
+            # import win32ui
+            # import win32con
+            import win32print
             print_files = self.__get_files()
             if print_files:
                 for f in print_files:
                     temp = path.join(self.__config["dir_path"], f)
                     win32api.ShellExecute(
-                        0, 'print', temp, win32print.GetDefaultPrinterW(), ".", 0)
-                    # win32api.ShellExecute(
-                    #     0, 'print', f, win32print.GetDefaultPrinterW(), ".", 0)
+                    0, 'print', temp, win32print.GetDefaultPrinterW(), ".", 0)
             pass
-        except Exception as e:
+        except (ImportError,Exception) as e:
+            raise e
+        pass
+    
+    def __print_in_unix(self):
+        try:
+            import subprocess
+            print_files = self.__get_files()
+            if print_files:
+                for f in print_files:
+                    temp = path.join(self.__config["dir_path"], f)
+                    cmd = 'lpr %s -p -q -r' % temp
+                    subprocess.call(cmd,shell=True)
+            pass
+        except (ImportError,Exception) as e:
             raise e
         pass
 
