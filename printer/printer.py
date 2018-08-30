@@ -48,7 +48,7 @@ class Printer(object):
             if not path.exists(folder_path):
                 os.makedirs(folder_path)
             handler = logging.FileHandler(
-                path.join(folder_path, 'print_log.log'))
+                path.join(folder_path, 'print.log'))
             formatter = logging.Formatter(
                 '%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
             handler.setFormatter(formatter)
