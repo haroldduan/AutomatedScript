@@ -2,7 +2,7 @@
 # Copyright 2018, AVATech
 #
 # Author Harold.Duan
-# This module is windows print script.
+# This module is (windows\unix) print script.
 
 import sys 
 reload(sys)
