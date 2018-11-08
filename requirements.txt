@@ -1,0 +1,2 @@
+jsonplus==0.8.0
+psutil==5.4.7
